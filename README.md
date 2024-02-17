@@ -7,7 +7,7 @@ chat server/client as a nice opportunity to employ them all.
 I'm also getting the opportunity to build from scratch with: Flask, flask_socketio, Jinja, JavaScript.  Those are all new to me.
 I'm also visiting SOLID OOP design principles, BSD server/client communication structure principles.
 
-# Initial revision visits:
+# Patterns Implemented :
 
 Creational patterns:
 -Singleton
@@ -17,7 +17,7 @@ Creational patterns:
 Structural patters:
 -Decorator
 
-Still to go:
+# Patterns Still To Go:
 Creational Patterns:
 -Prototype
 
