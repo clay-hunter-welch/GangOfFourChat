@@ -4,10 +4,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chat App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World's Third Best Chat Application</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
 </head>
 <body>
-    <h1>Welcome to the Chat App</h1>
+    <h1>Welcome to the World's Third Best Chat App</h1>
+    <div id="userPanel">
+        <!-- Log In and Sign Up Buttons -->
+        <div id="buttonContainer">
+            <button id="loginButton">Log In</button>
+            <button id="signupButton">Sign Up</button>
+        </div>
+        <!-- Placeholder for Log In and Sign Up Forms -->
+        <div id="formContainer">
+        </div>
+        <!-- Placeholder for User List -->
+        <div id="userList">
+            <!-- User list will be populated here -->
+        </div>
+    </div>
+
+
     <div id="messages">
         <!-- Chat messages will be displayed here -->
     </div>
@@ -48,6 +67,49 @@
         });
     </script>
     -->
+    <script>
+        document.getElementById('loginButton').addEventListener('click', function() {
+            showLoginForm();
+        });
+
+        document.getElementById('signupButton').addEventListener('click', function() {
+            showSignUpForm();
+        });
+
+        function showLoginForm() {
+            document.getElementById('formContainer').innerHTML = `
+                <form id="loginForm">
+                    Username: <input type="text" name="username" autocomplete="current-username"><br>
+                    Password: <input type="password" name="password" autocomplete="current-password"><br>
+                    <button type="submit">Submit</button>
+                </form>
+            `;
+        }
+
+        function showSignUpForm() {
+            document.getElementById('formContainer').innerHTML = `
+                <form id="signupForm">
+                    Username: <input type="text" name="username" autocomplete="current-username"><br>
+                    Email: <input type="email" name="email" autocomplete="current-email"><br>
+                    Password: <input type="password" name="password" autocomplete="current-password"><br>
+                    <button type="button" id="submitSignUp">Submit</button>
+                </form>
+            `;
+            document.getElementById('submitSignUp').addEventListener('click', submitSignupForm);
+        }
+
+        function submitSignupForm() {
+            const form = document.getElementById('signupForm');
+            const formData = new FormData(form);
+
+            fetch('/signup', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+              .then(data => console.log(data))
+              .catch(error => console.error('Error:', error));
+        }
+    </script>
 
 </body>
 </html>

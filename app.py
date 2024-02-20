@@ -4,8 +4,10 @@ from dotenv import load_dotenv
 from flask import Flask, render_template
 from flask_socketio import SocketIO
 from flask_socketio import emit
+from signup import signup_blueprint
 
 app = Flask(__name__)
+app.register_blueprint(signup_blueprint)
 socketio = SocketIO(app)
 load_dotenv()
 

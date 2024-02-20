@@ -1,6 +1,8 @@
 # Gang of Four project:
 # Creational patterns:
 #   -Abstract factory
+#   -Builder
+#   -Prototype
 # Structural patterns:
 # Behavioral patterns:
 # Concurrency patterns:
@@ -9,6 +11,11 @@ class User:
     def __init__(self):
         self.name = None
         # add other basic user properties
+        self.title = None
+        self.permissions = 'basic'
+        self.about = None
+        self.image = None
+
 
 class UserBuilder:
     def __init__(self):
@@ -33,10 +40,12 @@ class RegularUserBuilder(UserBuilder):
         # set permissions here
         return self
 
+
 class ModeratorUserBuilder(UserBuilder):
     def set_moderation_permissions(self):
         # set permissions here
         return self
+
 
 class AdministratorUserBuilder(UserBuilder):
     def set_administrative_permissions(self):
@@ -47,15 +56,17 @@ class AdministratorUserBuilder(UserBuilder):
         # set action access
         return self
 
+
 class AbstractUserFactory:
     @staticmethod
     def get_user_builder(user_type):
-        if user_type == "RegularUser":
-            return RegularUserBuilder()
-        elif user_type == "Moderator":
-            return ModeratorUserBuilder()
-        elif user_type == "AdinistratorUser":
-            return AdministratorUserBuilder()
-        # Add more conditions for other user types
-        else:
-            raise ValueError(f"Unknown user type: {user_type}")
+        match user_type:
+            case 'RegularUser':
+                return RegularUserBuilder()
+            case 'Moderator':
+                return ModeratorUserBuilder()
+            case 'AdministratorUser':
+                return AdministratorUserBuilder()
+            # Add more conditions for other user types
+            case _:
+                raise ValueError(f"Unknown user type: {user_type}")

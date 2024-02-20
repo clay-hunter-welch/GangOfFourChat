@@ -1,0 +1,37 @@
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+#userPanel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 15%; /* Adjust the width as needed */
+    height: 100%;
+    background-color: #f3f3f3; /* Light grey background, adjust as needed */
+    box-shadow: -2px 0 5px rgba(0,0,0,0.5); /* Optional: adds shadow for depth */
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#buttonContainer {
+    display: flex; /* Enables Flexbox for this container */
+    justify-content: center; /* Horizontally center-aligns the flex items (buttons) */
+    gap: 10px; /* Adds space between the buttons */
+}
+
+#buttonContainer button {
+    display: inline-block; /* Side by side */
+    margin: 5px; /* Adds space around each button */
+}
+
+#userList {
+    margin-top: 20px;
+    width: 100%;
+    flex-grow: 1;
+    overflow-y: auto; /* Enables scrolling if the user list is long */
+}
