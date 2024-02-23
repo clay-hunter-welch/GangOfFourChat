@@ -5,7 +5,7 @@
 # Behavioral patterns:
 # Concurrency patterns:
 
-from users import *
+from users import AbstractUserFactory
 
 
 # message classes and methods
@@ -54,8 +54,6 @@ class CommandMessage(Message):
     def process(self):
         print(f"Processing Command message: {self.command}")
 
-        # This is a simplified example of parsing a command message
-        # In practice, you'd likely use a more robust method (e.g., regular expressions, a parsing library)
         parts = self.command.split(", ")
         action, user_type = parts[0].split(": ")
         details = {part.split(": ")[0]: part.split(": ")[1] for part in parts[1:]}
@@ -65,7 +63,6 @@ class CommandMessage(Message):
             user = user_builder.set_username(details["Username"]) \
                 .set_permissions(details["Permissions"]) \
                 .build()
-            # Add the user to your system (e.g., adding to a list of users, database, etc.)
 
 
 def message_factory(message_type, content):

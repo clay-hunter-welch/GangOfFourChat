@@ -40,10 +40,11 @@ def signup():
         user_data = user.to_dict()
         print(
             f'Signup Request processed for Username: {username}, Email: {email}, Password: {hashed_password_hex}, Role: {role}')
-        # Log in user
 
-        # Write user_data to JSON file (not shown for brevity)
+        # Write user_data to JSON file
         write_user_to_file(user_data)
+
+        # To do: Log in user here, need to modify login() to accept data not POST generated
 
         return jsonify({"message": "User Signup successful"}), 200
     else:
@@ -52,7 +53,6 @@ def signup():
 
 def create_user(username='None', email='None', hashed_password_hex='None', role='None'):
     user_builder = AbstractUserFactory.get_user_builder(role)
-#    user = user_builder.configure(username, email, role, hashed_password_hex, title, about, image).build()
     user = user_builder.configure(username, email, role, hashed_password_hex).build()
 
     return user
@@ -63,17 +63,12 @@ def login():
     # Extract data from form data
     username = request.form['username']
     password = request.form['password']  # In production, ensure this is handled securely
-    # Replace with actual data retrieval and password hashing mechanism
-    # data = request.get_json()
-    # username = data['username']
-    # password = data['password']
-    print("will try to get user data for ", username)
+
     user_data = get_user_data(username)
     hashed_password = bytes.fromhex(user_data['password'])
 
     if user_data and bcrypt.checkpw(password.encode('utf-8'), hashed_password):
         session['username'] = username
-        print("i just set the session username to ", username)
         return jsonify({"message": "Login successful", "username": username}), 200
     else:
         return jsonify({"error": "Invalid credentials"}), 401
@@ -81,7 +76,6 @@ def login():
 
 @logout_blueprint.route('/logout', methods=['POST'])
 def logout():
-    #print("hello from logout land.")
     session.clear()  # This clears all data stored in the session
     return jsonify({'success': 'Logged out successfully'}), 200
 
@@ -108,7 +102,7 @@ def write_user_to_file(user_info):
 def get_user_data(username):
     # Path to your JSON file
     filepath = 'users.json'
-    print("in get user data, looking for ", username)
+
     try:
         # Open the JSON file and load the data
         with open(filepath, 'r') as file:
@@ -117,7 +111,6 @@ def get_user_data(username):
         # Search for the user by username
         for user in users:
             if user['username'] == username:
-                print("success, because ", user['username'], " == ", username)
                 return user  # Return the user data if found
     except FileNotFoundError:
         print("The user data file was not found.")

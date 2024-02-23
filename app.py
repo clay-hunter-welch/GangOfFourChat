@@ -31,9 +31,7 @@ def is_logged_in():
 @socketio.on('send_message')
 def handle_send_message_event(data):
     session_user = data.get('username')
-    print("session user looks like: ", session_user)
     if not session_user:
-        print("not session user.")
         abort(401)
 
     data['text'] = f"{session_user}: {data['text']}"
