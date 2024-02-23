@@ -1,11 +1,11 @@
 # GangOfFourChat
 Python chat server intended as a tour through all of the Gang of Four design patterns
 
-Decided to do a tour through the Gang of Four design patterns, and my old pal ChatGPT suggested a 
+I decided to do a tour through the Gang of Four design patterns, and my old pal ChatGPT suggested a 
 chat server/client as a nice opportunity to employ them all.  
 
-I'm also getting the opportunity to build from scratch with: Flask, flask_socketio, Jinja, JavaScript.  Those are all new to me.
-I'm also visiting SOLID OOP design principles, BSD server/client communication structure principles.
+I'm also getting the opportunity to build from scratch with Flask, flask_socketio, Jinja, JavaScript.  Those are all new to me.
+I'm also visiting SOLID OOP design principles, and BSD server/client communication structure principles.
 
 # Patterns Implemented :
 
@@ -14,12 +14,11 @@ Creational patterns:
 -Factory
 -Abstract Factory
 -Builder
-Structural patters:
+-Prototype
+Structural patterns:
 -Decorator
 
 # Patterns Still To Go:
-Creational Patterns:
--Prototype
 
 Structural patterns:
 -Adapter
