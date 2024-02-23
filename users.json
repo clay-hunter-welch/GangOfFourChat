@@ -1,0 +1,20 @@
+[
+    {
+        "username": "Cool.Dude",
+        "password": "24326224313224434c514c574e483838392f4c3637554841647761662e705675453648776458357178415a4f4a7741754e68373547484c305534434f",
+        "role": "Regular",
+        "email": "clay.hunter.welch@gmail.com",
+        "title": null,
+        "about": null,
+        "image": null
+    },
+    {
+        "username": "Awesome.Person",
+        "password": "24326224313224336e642e726a38416d336b6255654d44387844756265424733776a69526f6476516b3449686b7375776c4b6737764864476b4c5565",
+        "role": "Regular",
+        "email": "clay.hunter.welch@gmail.com",
+        "title": null,
+        "about": null,
+        "image": null
+    }
+]
