@@ -1,27 +1,42 @@
 # simple web app interface constructor
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template
+from flask import Flask, render_template, session, abort
 from flask_socketio import SocketIO
 from flask_socketio import emit
-from signup import signup_blueprint
+from account_utilities import signup_blueprint, login_blueprint, logout_blueprint
 
 app = Flask(__name__)
 app.register_blueprint(signup_blueprint)
+app.register_blueprint(login_blueprint)
+app.register_blueprint(logout_blueprint)
+
 socketio = SocketIO(app)
 load_dotenv()
 
 chat_port = os.getenv('CHAT_SERVER_PORT')
 chat_port = int(chat_port) if chat_port else 5001
+secret_key = os.getenv('SECRET_KEY')
+app.secret_key = secret_key
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
+# Utility function to check if a user is logged in
+def is_logged_in():
+    return session.get('username', None)
+
 
 @socketio.on('send_message')
 def handle_send_message_event(data):
-    print('Message received:', data['text'])
+    session_user = data.get('username')
+    print("session user looks like: ", session_user)
+    if not session_user:
+        print("not session user.")
+        abort(401)
+
+    data['text'] = f"{session_user}: {data['text']}"
     emit('receive_message', data, broadcast=True)
 
 

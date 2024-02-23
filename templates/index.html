@@ -12,18 +12,23 @@
 <body>
     <h1>Welcome to the World's Third Best Chat App</h1>
     <div id="userPanel">
+        {% if user_logged_in %}
+            <span>Welcome, {{ username }}!</span>
+            <button id="logoutButton">Log Out</button>
+        {% else %}
         <!-- Log In and Sign Up Buttons -->
-        <div id="buttonContainer">
-            <button id="loginButton">Log In</button>
-            <button id="signupButton">Sign Up</button>
-        </div>
-        <!-- Placeholder for Log In and Sign Up Forms -->
-        <div id="formContainer">
-        </div>
-        <!-- Placeholder for User List -->
-        <div id="userList">
-            <!-- User list will be populated here -->
-        </div>
+            <div id="buttonContainer">
+                <button id="loginButton">Log In</button>
+                <button id="signupButton">Sign Up</button>
+            </div>
+            <!-- Placeholder for Log In and Sign Up Forms -->
+            <div id="formContainer">
+            </div>
+            <!-- Placeholder for User List -->
+            <div id="userList">
+                <!-- User list will be populated here -->
+            </div>
+        {% endif %}
     </div>
 
 
@@ -38,19 +43,24 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
-        socket.on('connect', function() {
-            console.log('Websocket connected!');
-            $('#messageForm').submit(function(e) {
-                e.preventDefault();
-                var messageText = $('#messageInput').val();
-                socket.emit('send_message', {text: messageText});
-                $('#messageInput').val(''); // Clear input field
+        $(document).ready(function() {
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+            socket.on('connect', function() {
+                console.log('Websocket connected!');
+                $('#messageForm').submit(function(e) {
+                    e.preventDefault();
+                    var messageText = $('#messageInput').val();
+                    var username = window.currentUsername;
+                    console.log("Emitting message with username:", username);
+                    socket.emit('send_message', {text: messageText, username: username});
+                    $('#messageInput').val(''); // Clear input field
+                });
             });
-        });
 
-        socket.on('receive_message', function(data) {
-            $('#messages').append('<p>' + data.text + '</p>');
+            socket.on('receive_message', function(data) {
+                console.log(typeof data);
+                $('#messages').append('<p>' + data.text + '</p>');
+            });
         });
     </script>
 
@@ -67,13 +77,30 @@
         });
     </script>
     -->
-    <script>
-        document.getElementById('loginButton').addEventListener('click', function() {
-            showLoginForm();
-        });
 
-        document.getElementById('signupButton').addEventListener('click', function() {
-            showSignUpForm();
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if the login button exists before attaching the event listener
+            var loginButton = document.getElementById('loginButton');
+            if (loginButton) {
+                loginButton.addEventListener('click', function() {
+                    showLoginForm();
+                });
+            }
+
+            // Similarly, check if the signup button exists
+            var signupButton = document.getElementById('signupButton');
+            if (signupButton) {
+                signupButton.addEventListener('click', function() {
+                    showSignUpForm();
+                });
+            }
+
+            // Attach the event listener to the logout button if it exists
+            var logoutButton = document.getElementById('logoutButton');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', logout);
+            }
         });
 
         function showLoginForm() {
@@ -81,9 +108,10 @@
                 <form id="loginForm">
                     Username: <input type="text" name="username" autocomplete="current-username"><br>
                     Password: <input type="password" name="password" autocomplete="current-password"><br>
-                    <button type="submit">Submit</button>
+                    <button type="button" id="submitLogin">Submit</button>
                 </form>
             `;
+            document.getElementById('submitLogin').addEventListener('click', submitLoginForm);
         }
 
         function showSignUpForm() {
@@ -92,10 +120,69 @@
                     Username: <input type="text" name="username" autocomplete="current-username"><br>
                     Email: <input type="email" name="email" autocomplete="current-email"><br>
                     Password: <input type="password" name="password" autocomplete="current-password"><br>
+                    <div>
+                        <input type="radio" id="regularUser" name="role" value="Regular" checked>
+                        <label for="regularUser">Regular User</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="moderator" name="role" value="Moderator">
+                        <label for="moderator">Moderator</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="admin" name="role" value="Admin">
+                        <label for="admin">Admin</label>
+                    </div>
+
                     <button type="button" id="submitSignUp">Submit</button>
                 </form>
             `;
             document.getElementById('submitSignUp').addEventListener('click', submitSignupForm);
+        }
+
+        function submitLoginForm() {
+            const form = document.getElementById('loginForm');
+            const formData = new FormData(form);
+
+            fetch('/login', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                if (response.ok) {
+                    return response.json(); // Assuming the server responds with JSON that includes the username
+                } else {
+                    throw new Error('Login failed');
+                }
+            }).then(data => {
+                // Assuming 'data' includes a 'username' field on successful login
+                updateLoginState(data.username);
+            }).catch(error => {
+                console.error('Error:', error);
+                // Optionally, update the UI to show an error message
+            });
+        }
+
+        function updateLoginState(username) {
+            window.currentUsername = username;
+            const userPanel = document.getElementById('userPanel');
+            userPanel.innerHTML = `
+                <span>Welcome, ${username}!</span>
+                <button id="logoutButton">Log Out</button>
+            `;
+            // Add the logout functionality
+            document.getElementById('logoutButton').addEventListener('click', logout);
+        }
+
+        function logout() {
+            fetch('/logout', {
+                method: 'POST'
+            }).then(response => {
+                if (response.ok) {
+                    // On successful logout, update the UI back to show login/signup buttons
+                    window.location.reload(); // or call a function to dynamically show the login/signup form again
+                } else {
+                    throw new Error('Logout failed');
+                }
+            }).catch(error => console.error('Error:', error));
         }
 
         function submitSignupForm() {
@@ -109,6 +196,7 @@
               .then(data => console.log(data))
               .catch(error => console.error('Error:', error));
         }
+
     </script>
 
 </body>
