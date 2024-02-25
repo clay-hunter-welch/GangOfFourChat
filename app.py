@@ -5,6 +5,7 @@ from flask import Flask, render_template, session, abort
 from flask_socketio import SocketIO
 from flask_socketio import emit
 from account_utilities import signup_blueprint, login_blueprint, logout_blueprint
+from datetime import datetime
 
 app = Flask(__name__)
 app.register_blueprint(signup_blueprint)
@@ -31,10 +32,12 @@ def is_logged_in():
 @socketio.on('send_message')
 def handle_send_message_event(data):
     session_user = data.get('username')
+    raw_post_time = datetime.now()
+    formatted_time = raw_post_time.strftime("%H:%M:%S %Z - %b %d, %Y ")
     if not session_user:
         abort(401)
 
-    data['text'] = f"{session_user}: {data['text']}"
+    data['text'] = f"{data['text']}<br>&nbsp;&nbsp;&nbsp;{session_user}, {formatted_time}"
     emit('receive_message', data, broadcast=True)
 
 

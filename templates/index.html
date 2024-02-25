@@ -7,10 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>World's Third Best Chat Application</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
+    <link href="https://fonts.googleapis.com/css2?family=Barriecito&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Welcome to the World's Third Best Chat App</h1>
+    <div class="title-container">
+        <img src="{{ url_for('static', filename='images/internet_party.gif') }}" alt="Internet Party">
+        <h1>Welcome to the World's Third Best Chat App</h1>
+        <img src="{{ url_for('static', filename='images/speech.gif') }}" alt="Internet Party">
+    </div>
     <div id="userPanel">
         {% if user_logged_in %}
             <span>Welcome, {{ username }}!</span>
@@ -59,7 +63,7 @@
 
             socket.on('receive_message', function(data) {
                 console.log(typeof data);
-                $('#messages').append('<p>' + data.text + '</p>');
+                $('#messages').append('<div class="message-pane">' + data.text + '</div>');
             });
         });
     </script>

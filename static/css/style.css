@@ -1,6 +1,15 @@
 body, html {
     height: 100%;
     margin: 0;
+    background: linear-gradient(to bottom, #49f66b 0%, #0fda37 100%);
+}
+
+h1 {
+    color: #FFFFFF;
+    font-size: 45px;
+    font-family: 'Barriecito', cursive; /* Apply Barriecito and specify a generic family as a fallback */
+    text-align: left; /* Center-align the title */
+    -webkit-text-stroke: 1px #3d3dce; /* Stroke width and color */
 }
 
 #userPanel {
@@ -9,7 +18,7 @@ body, html {
     top: 0;
     width: 15%; /* Adjust the width as needed */
     height: 100%;
-    background-color: #f3f3f3; /* Light grey background, adjust as needed */
+    background-color: #3d3dce; /* Light grey background, adjust as needed */
     box-shadow: -2px 0 5px rgba(0,0,0,0.5); /* Optional: adds shadow for depth */
     padding: 20px;
     box-sizing: border-box;
@@ -34,4 +43,28 @@ body, html {
     width: 100%;
     flex-grow: 1;
     overflow-y: auto; /* Enables scrolling if the user list is long */
+}
+
+.message-pane {
+    background-color: #ef036c; /* Pink background */
+    color: white; /* White text color */
+    margin: 10px 0; /* Adds space between messages */
+    padding: 10px; /* Padding inside the pane */
+    border-radius: 10px; /* Rounded corners */
+    max-width: 80%; /* Maximum width of the message pane */
+    word-wrap: break-word; /* Ensures text wraps inside the pane */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25); /* Adds a subtle shadow */
+}
+
+.title-container img {
+    height: 75px; /* Adjust based on your title's actual height */
+    width: auto; /* Maintain aspect ratio */
+}
+
+.title-container {
+    display: flex; /* Enables Flexbox layout */
+    justify-content: left; /* Centers children horizontally */
+    align-items: left; /* Centers children vertically */
+    gap: 20px; /* Optional: Adds space between the children */
+    text-align: left; /* Ensures text alignment is centered for multi-line titles */
 }
